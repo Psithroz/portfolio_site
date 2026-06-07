@@ -282,7 +282,7 @@ export default function Home() {
             <Github className="h-6 w-6" />
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/in/timotey-lamotte-6b41a22ba/"
             aria-label="LinkedIn"
             className="text-brand-text-muted hover:text-brand-mint transition-colors"
             target="_blank"

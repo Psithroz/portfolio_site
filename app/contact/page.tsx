@@ -53,9 +53,12 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <p className="text-brand-text font-medium">Email</p>
-                    <p className="text-brand-text-muted">
-                      yourname@example.com
-                    </p>
+                    <a
+                      href="mailto:timolamotte@gmail.com"
+                      className="text-brand-text-muted hover:text-brand-mint transition-colors"
+                    >
+                      timolamotte@gmail.com
+                    </a>
                   </div>
                 </div>
 
@@ -65,7 +68,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <p className="text-brand-text font-medium">Location</p>
-                    <p className="text-brand-text-muted">[City, Country]</p>
+                    <p className="text-brand-text-muted">Avignon, France</p>
                   </div>
                 </div>
 
@@ -76,12 +79,12 @@ export default function ContactPage() {
                   <div>
                     <p className="text-brand-text font-medium">LinkedIn</p>
                     <a
-                      href="#"
+                      href="https://www.linkedin.com/in/timotey-lamotte-6b41a22ba/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-brand-mint hover:underline"
                     >
-                      linkedin.com/in/your-profile
+                      linkedin.com/in/timotey-lamotte
                     </a>
                   </div>
                 </div>
