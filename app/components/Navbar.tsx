@@ -34,7 +34,7 @@ export default function Navbar() {
           href="/"
           className="text-sm font-semibold tracking-wide text-brand-text"
         >
-          [Logo / Name]
+          Timotey LAMOTTE
         </Link>
 
         {/* Desktop Nav */}
