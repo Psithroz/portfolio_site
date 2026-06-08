@@ -1,122 +1,68 @@
+"use client";
+
 import { Cpu, Rocket, Target } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageProvider";
+import type {
+  ObjectiveCategoryKey,
+  ObjectiveStatusKey,
+} from "../i18n/types";
 
-type ObjectiveStatus = "In Progress" | "Target 2026" | "Mastered";
-
-interface Objective {
-  id: string;
-  category: "Technical Goals" | "Project Goals" | "Career Goals";
-  title: string;
-  status: ObjectiveStatus;
-  target: string;
-  reason: string;
-}
-
-const objectives: Objective[] = [
-  {
-    id: "tech-1",
-    category: "Technical Goals",
-    title: "[Objective Title]",
-    status: "In Progress",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. deepening my ability to build immersive 3D experiences.]",
-  },
-  {
-    id: "tech-2",
-    category: "Technical Goals",
-    title: "[Objective Title]",
-    status: "Target 2026",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. exploring new systems languages and low-level performance.]",
-  },
-  {
-    id: "project-1",
-    category: "Project Goals",
-    title: "[Objective Title]",
-    status: "In Progress",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. building something end-to-end that delivers real value.]",
-  },
-  {
-    id: "project-2",
-    category: "Project Goals",
-    title: "[Objective Title]",
-    status: "Target 2026",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. giving back to the open-source community I rely on.]",
-  },
-  {
-    id: "career-1",
-    category: "Career Goals",
-    title: "[Objective Title]",
-    status: "In Progress",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. growing into a role where I can own features across the stack.]",
-  },
-  {
-    id: "career-2",
-    category: "Career Goals",
-    title: "[Objective Title]",
-    status: "Mastered",
-    target: "[Target Completion Date]",
-    reason: "[Why this matters to me — e.g. collaborating with diverse teams across time zones.]",
-  },
-];
-
-function getIconForCategory(category: Objective["category"]) {
+function getIconForCategory(category: ObjectiveCategoryKey) {
   switch (category) {
-    case "Technical Goals":
+    case "technical":
       return Cpu;
-    case "Project Goals":
+    case "project":
       return Rocket;
-    case "Career Goals":
+    case "career":
       return Target;
   }
 }
 
-function getStatusStyles(status: ObjectiveStatus) {
+function getStatusStyles(status: ObjectiveStatusKey) {
   const base =
     "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold text-brand-mint bg-[rgba(0,255,194,0.12)]";
 
   switch (status) {
-    case "In Progress":
+    case "inProgress":
       return base;
-    case "Target 2026":
+    case "target2026":
       return base + " border border-[rgba(0,255,194,0.3)]";
-    case "Mastered":
+    case "mastered":
       return base + " bg-[rgba(0,255,194,0.18)]";
   }
 }
 
-function getProgressFraction(status: ObjectiveStatus) {
+function getProgressFraction(status: ObjectiveStatusKey) {
   switch (status) {
-    case "In Progress":
+    case "inProgress":
       return 0.55;
-    case "Target 2026":
+    case "target2026":
       return 0.3;
-    case "Mastered":
+    case "mastered":
       return 1;
   }
 }
 
 export default function ObjectivesPage() {
+  const { t } = useLanguage();
+  const o = t.objectives;
+
   return (
     <main className="min-h-screen pt-24 px-6">
       <div className="mx-auto max-w-3xl">
         <header className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-brand-text">
-            Objectives
+            {o.title}
           </h1>
           <p className="mt-4 text-brand-text-muted max-w-2xl mx-auto">
-            A living roadmap of where I&apos;m heading next — technically,
-            creatively, and professionally. Replace these placeholders with the
-            goals that define your own trajectory.
+            {o.subtitle}
           </p>
         </header>
 
         <section className="space-y-6">
-          {objectives.map((objective, index) => {
-            const Icon = getIconForCategory(objective.category);
-            const progress = getProgressFraction(objective.status);
+          {o.items.map((objective, index) => {
+            const Icon = getIconForCategory(objective.categoryKey);
+            const progress = getProgressFraction(objective.statusKey);
 
             return (
               <article
@@ -135,15 +81,15 @@ export default function ObjectivesPage() {
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
                         <p className="text-xs uppercase tracking-wide text-brand-text-muted">
-                          {objective.category}
+                          {o.categories[objective.categoryKey]}
                         </p>
                         <h2 className="text-lg md:text-xl font-semibold text-brand-text">
                           {objective.title}
                         </h2>
                       </div>
 
-                      <span className={getStatusStyles(objective.status)}>
-                        {objective.status}
+                      <span className={getStatusStyles(objective.statusKey)}>
+                        {o.statuses[objective.statusKey]}
                       </span>
                     </div>
 
@@ -154,7 +100,7 @@ export default function ObjectivesPage() {
                     <div className="flex items-center justify-between text-xs text-brand-text-muted">
                       <span>{objective.target}</span>
                       <span className="text-[0.7rem] uppercase tracking-wide">
-                        [Why this matters to me]
+                        {o.whyMatters}
                       </span>
                     </div>
 
