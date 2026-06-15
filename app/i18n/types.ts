@@ -62,6 +62,11 @@ export interface Translations {
   cyberNews: {
     title: string;
     subtitle: string;
+    tabs: {
+      all: string;
+      french: string;
+      english: string;
+    };
     loading: string;
     error: string;
     noArticles: string;

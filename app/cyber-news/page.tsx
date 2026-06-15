@@ -6,20 +6,35 @@ import { useLanguage } from "../i18n/LanguageProvider";
 
 const RSS2JSON_API = "https://api.rss2json.com/v1/api.json?rss_url=";
 
-const FEEDS = [
-  {
-    name: "ANSSI",
-    url: "https://www.cert.ssi.gouv.fr/alerte/feed/",
-  },
-  {
-    name: "LeMagIT Sécurité",
-    url: "https://www.lemagit.fr/rss/Securite",
-  },
-  {
-    name: "Zataz",
-    url: "https://www.zataz.com/feed/",
-  },
-] as const;
+type FeedLanguage = "fr" | "en";
+type FeedFilter = "all" | FeedLanguage;
+
+const FEEDS: Record<FeedLanguage, { name: string; url: string }[]> = {
+  fr: [
+    { name: "ANSSI", url: "https://www.cert.ssi.gouv.fr/alerte/feed/" },
+    { name: "LeMagIT Sécurité", url: "https://www.lemagit.fr/rss/Securite" },
+    { name: "Zataz", url: "https://www.zataz.com/feed/" },
+    { name: "Silicon FR", url: "https://www.silicon.fr/cybersecurite/feed" },
+  ],
+  en: [
+    {
+      name: "The Hacker News",
+      url: "https://feeds.feedburner.com/TheHackersNews",
+    },
+    {
+      name: "BleepingComputer",
+      url: "https://www.bleepingcomputer.com/feed/",
+    },
+    { name: "Krebs on Security", url: "https://krebsonsecurity.com/feed/" },
+    { name: "Dark Reading", url: "https://www.darkreading.com/rss.xml" },
+  ],
+};
+
+const ALL_FEEDS = (
+  Object.entries(FEEDS) as [FeedLanguage, (typeof FEEDS)[FeedLanguage]][]
+).flatMap(([language, feeds]) =>
+  feeds.map((feed) => ({ ...feed, language }))
+);
 
 interface RssItem {
   title: string;
@@ -34,6 +49,7 @@ interface Article {
   link: string;
   pubDate: Date;
   source: string;
+  language: FeedLanguage;
   snippet: string;
 }
 
@@ -48,9 +64,21 @@ function truncate(text: string, maxLength = 160): string {
   return text.slice(0, maxLength).trimEnd() + "…";
 }
 
+function formatArticleDate(date: Date, language: FeedLanguage): string {
+  const localeTag = language === "fr" ? "fr-FR" : "en-US";
+  return new Intl.DateTimeFormat(localeTag, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
 async function fetchFeed(
   feedUrl: string,
-  sourceName: string
+  sourceName: string,
+  language: FeedLanguage
 ): Promise<Article[]> {
   const response = await fetch(
     `${RSS2JSON_API}${encodeURIComponent(feedUrl)}`
@@ -65,6 +93,7 @@ async function fetchFeed(
     link: item.link,
     pubDate: new Date(item.pubDate),
     source: sourceName,
+    language,
     snippet: truncate(stripHtml(item.description || item.content || "")),
   }));
 }
@@ -85,11 +114,54 @@ function LoadingSpinner({ label }: { label: string }) {
   );
 }
 
+function FeedFilterTabs({
+  activeFilter,
+  onChange,
+  labels,
+}: {
+  activeFilter: FeedFilter;
+  onChange: (filter: FeedFilter) => void;
+  labels: { all: string; french: string; english: string };
+}) {
+  const tabs: { key: FeedFilter; label: string }[] = [
+    { key: "all", label: labels.all },
+    { key: "fr", label: labels.french },
+    { key: "en", label: labels.english },
+  ];
+
+  return (
+    <div
+      className="inline-flex items-center rounded-full border border-[rgba(0,255,194,0.25)] bg-[rgba(0,255,194,0.06)] p-1"
+      role="tablist"
+      aria-label={labels.all}
+    >
+      {tabs.map((tab) => (
+        <button
+          key={tab.key}
+          type="button"
+          role="tab"
+          aria-selected={activeFilter === tab.key}
+          onClick={() => onChange(tab.key)}
+          className={[
+            "rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200",
+            activeFilter === tab.key
+              ? "bg-brand-mint text-brand-bg shadow-[0_0_12px_rgba(0,255,194,0.25)]"
+              : "text-brand-text-muted hover:text-brand-mint",
+          ].join(" ")}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function CyberNewsPage() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const cn = t.cyberNews;
 
   const [articles, setArticles] = React.useState<Article[]>([]);
+  const [activeFilter, setActiveFilter] = React.useState<FeedFilter>("all");
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -102,7 +174,9 @@ export default function CyberNewsPage() {
 
       try {
         const results = await Promise.all(
-          FEEDS.map((feed) => fetchFeed(feed.url, feed.name))
+          ALL_FEEDS.map((feed) =>
+            fetchFeed(feed.url, feed.name, feed.language)
+          )
         );
 
         if (cancelled) return;
@@ -126,17 +200,15 @@ export default function CyberNewsPage() {
     };
   }, [cn.error]);
 
-  const dateFormatter = React.useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    [locale]
-  );
+  const filteredArticles = React.useMemo(() => {
+    if (activeFilter === "all") return articles;
+    return articles.filter((article) => article.language === activeFilter);
+  }, [articles, activeFilter]);
+
+  const visibleFeeds = React.useMemo(() => {
+    if (activeFilter === "all") return ALL_FEEDS;
+    return ALL_FEEDS.filter((feed) => feed.language === activeFilter);
+  }, [activeFilter]);
 
   return (
     <main className="min-h-screen flex flex-col bg-brand-bg text-brand-text font-sans">
@@ -147,10 +219,19 @@ export default function CyberNewsPage() {
               {cn.title}
             </h1>
             <p className="mt-3 max-w-2xl text-brand-text-muted">{cn.subtitle}</p>
+
+            <div className="mt-6">
+              <FeedFilterTabs
+                activeFilter={activeFilter}
+                onChange={setActiveFilter}
+                labels={cn.tabs}
+              />
+            </div>
+
             <div className="mt-4 flex flex-wrap gap-2">
-              {FEEDS.map((feed) => (
+              {visibleFeeds.map((feed) => (
                 <span
-                  key={feed.name}
+                  key={`${feed.language}-${feed.name}`}
                   className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium text-brand-mint border border-brand-mint/30 bg-brand-mint/5"
                 >
                   {feed.name}
@@ -167,28 +248,36 @@ export default function CyberNewsPage() {
             </div>
           )}
 
-          {!loading && !error && articles.length === 0 && (
+          {!loading && !error && filteredArticles.length === 0 && (
             <p className="text-center text-brand-text-muted py-16">
               {cn.noArticles}
             </p>
           )}
 
-          {!loading && !error && articles.length > 0 && (
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {articles.map((article, index) => (
+          {!loading && !error && filteredArticles.length > 0 && (
+            <section
+              role="tabpanel"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filteredArticles.map((article, index) => (
                 <article
                   key={`${article.link}-${index}`}
                   className="group flex flex-col rounded-2xl p-5 md:p-6 bg-[rgba(21,26,33,0.5)] backdrop-blur-lg border border-[rgba(0,255,194,0.1)] transition duration-200 hover:border-brand-mint hover:shadow-[0_0_20px_rgba(0,255,194,0.15)]"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold text-brand-mint border border-brand-mint/25 bg-brand-mint/5">
-                      {article.source}
-                    </span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold text-brand-mint border border-brand-mint/25 bg-brand-mint/5 truncate">
+                        {article.source}
+                      </span>
+                      <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-cyan border border-brand-cyan/25 bg-brand-cyan/5">
+                        {article.language}
+                      </span>
+                    </div>
                     <time
                       dateTime={article.pubDate.toISOString()}
-                      className="text-xs text-brand-text-muted whitespace-nowrap"
+                      className="text-xs text-brand-text-muted whitespace-nowrap shrink-0"
                     >
-                      {dateFormatter.format(article.pubDate)}
+                      {formatArticleDate(article.pubDate, article.language)}
                     </time>
                   </div>
 

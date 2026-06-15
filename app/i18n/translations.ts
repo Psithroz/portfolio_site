@@ -150,7 +150,12 @@ export const translations: Record<Locale, Translations> = {
     cyberNews: {
       title: "Veille Cybersécurité",
       subtitle:
-        "Flux RSS en temps réel depuis ANSSI, LeMagIT Sécurité et Zataz — actualités triées du plus récent au plus ancien.",
+        "Flux RSS en temps réel — sources françaises et anglaises, triées du plus récent au plus ancien.",
+      tabs: {
+        all: "Tous",
+        french: "Flux français",
+        english: "Flux anglais",
+      },
       loading: "Chargement des flux RSS…",
       error:
         "Impossible de charger les flux RSS. Veuillez réessayer plus tard.",
@@ -420,7 +425,12 @@ export const translations: Record<Locale, Translations> = {
     cyberNews: {
       title: "Cybersecurity Monitor",
       subtitle:
-        "Real-time RSS feeds from ANSSI, LeMagIT Sécurité and Zataz — articles sorted newest to oldest.",
+        "Real-time RSS feeds from French and English sources, sorted newest to oldest.",
+      tabs: {
+        all: "All",
+        french: "French Feeds",
+        english: "English Feeds",
+      },
       loading: "Loading RSS feeds…",
       error: "Unable to load RSS feeds. Please try again later.",
       noArticles: "No articles available at the moment.",
