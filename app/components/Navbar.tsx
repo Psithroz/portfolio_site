@@ -15,6 +15,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: t.nav.home },
     { href: "/projects", label: t.nav.projects },
+    { href: "/cyber-news", label: t.nav.cyberNews },
     { href: "/objectives", label: t.nav.objectives },
     { href: "/contact", label: t.nav.contact },
   ];

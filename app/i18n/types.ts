@@ -52,11 +52,20 @@ export interface Translations {
   nav: {
     home: string;
     projects: string;
+    cyberNews: string;
     objectives: string;
     contact: string;
     githubProfile: string;
     toggleNav: string;
     switchLanguage: string;
+  };
+  cyberNews: {
+    title: string;
+    subtitle: string;
+    loading: string;
+    error: string;
+    noArticles: string;
+    readMore: string;
   };
   home: {
     subtitle: string;

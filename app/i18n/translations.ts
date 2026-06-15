@@ -10,6 +10,7 @@ export const translations: Record<Locale, Translations> = {
     nav: {
       home: "Accueil",
       projects: "Projets",
+      cyberNews: "Cybersécurité",
       objectives: "Objectifs",
       contact: "Contact",
       githubProfile: "Profil GitHub",
@@ -146,6 +147,16 @@ export const translations: Record<Locale, Translations> = {
       success:
         "Message envoyé ! Ceci est un message de confirmation provisoire en attendant l'intégration du formulaire.",
     },
+    cyberNews: {
+      title: "Veille Cybersécurité",
+      subtitle:
+        "Flux RSS en temps réel depuis ANSSI, LeMagIT Sécurité et Zataz — actualités triées du plus récent au plus ancien.",
+      loading: "Chargement des flux RSS…",
+      error:
+        "Impossible de charger les flux RSS. Veuillez réessayer plus tard.",
+      noArticles: "Aucun article disponible pour le moment.",
+      readMore: "Lire l'article",
+    },
     projects: {
       title: "Projets",
       subtitle:
@@ -269,6 +280,7 @@ export const translations: Record<Locale, Translations> = {
     nav: {
       home: "Home",
       projects: "Projects",
+      cyberNews: "Cybersecurity",
       objectives: "Objectives",
       contact: "Contact",
       githubProfile: "GitHub Profile",
@@ -404,6 +416,15 @@ export const translations: Record<Locale, Translations> = {
       submit: "Send Message",
       success:
         "Message sent! This is a preview confirmation message pending form integration.",
+    },
+    cyberNews: {
+      title: "Cybersecurity Monitor",
+      subtitle:
+        "Real-time RSS feeds from ANSSI, LeMagIT Sécurité and Zataz — articles sorted newest to oldest.",
+      loading: "Loading RSS feeds…",
+      error: "Unable to load RSS feeds. Please try again later.",
+      noArticles: "No articles available at the moment.",
+      readMore: "Read article",
     },
     projects: {
       title: "Projects",
