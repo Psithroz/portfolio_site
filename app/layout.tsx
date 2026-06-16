@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Timotey LAMOTTE — Portfolio",
+  title: "Timotey LAMOTTE — Technicien Réseaux",
   description:
-    "Portfolio de Timotey LAMOTTE — Étudiant en informatique, support technique et cybersécurité.",
+    "CV de Timotey LAMOTTE — Technicien Réseaux, certification CCNA, administration réseau, sécurité et virtualisation.",
 };
 
 export default function RootLayout({

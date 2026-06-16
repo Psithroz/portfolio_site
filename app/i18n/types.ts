@@ -22,6 +22,14 @@ export interface CertificateItem {
   description: string;
 }
 
+export type NetworkSkillKey = "routing" | "security" | "systems" | "monitoring";
+
+export interface NetworkSkillCategory {
+  categoryKey: NetworkSkillKey;
+  category: string;
+  skills: string[];
+}
+
 export interface SkillCategory {
   category: string;
   items: string;
@@ -75,20 +83,23 @@ export interface Translations {
   home: {
     subtitle: string;
     tagline: string;
+    terminalPrompt: string;
     profileTitle: string;
     profileText: string;
-    skillsTitle: string;
-    skillsText: string;
+    downloadCv: string;
+    location: string;
     educationTitle: string;
     experienceTitle: string;
     certificatesTitle: string;
     skillsSectionTitle: string;
+    languagesTitle: string;
     footerRights: string;
     emailAria: string;
     experience: ExperienceItem[];
     education: EducationItem[];
     certificates: CertificateItem[];
-    skills: SkillCategory[];
+    networkSkills: NetworkSkillCategory[];
+    languages: string[];
   };
   contact: {
     title: string;

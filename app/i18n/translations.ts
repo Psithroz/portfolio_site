@@ -3,9 +3,9 @@ import type { Locale, Translations } from "./types";
 export const translations: Record<Locale, Translations> = {
   fr: {
     metadata: {
-      title: "Timotey LAMOTTE — Portfolio",
+      title: "Timotey LAMOTTE — Technicien Réseaux",
       description:
-        "Portfolio de Timotey LAMOTTE — Étudiant en informatique, support technique et cybersécurité.",
+        "CV de Timotey LAMOTTE — Technicien Réseaux, administration réseau, sécurité et virtualisation.",
     },
     nav: {
       home: "Accueil",
@@ -18,31 +18,32 @@ export const translations: Record<Locale, Translations> = {
       switchLanguage: "Changer de langue",
     },
     home: {
-      subtitle: "Étudiant — Recherche emploi été 2025",
+      subtitle: "Technicien Réseaux",
       tagline:
-        "Jeune étudiant motivé et expérimenté dans l'accueil et le service, je recherche un emploi pour l'été 2025 en vue de développer mes compétences.",
+        "Passionné par les infrastructures réseau, je conçois, déploie et maintiens des environnements fiables, sécurisés et performants.",
+      terminalPrompt: "network@timotey:~$ whoami",
       profileTitle: "Profil",
       profileText:
-        "Jeune étudiant motivé et expérimenté dans l'accueil et le service, avec une solide expérience en support informatique et une passion pour la cybersécurité et les réseaux.",
-      skillsTitle: "Compétences clés",
-      skillsText:
-        "Support technique, administration réseau, développement Python/C++, certifications Azure et CCNA. Bilingue français-anglais avec expérience internationale au Canada.",
+        "Technicien réseaux junior, je maîtrise la configuration de switches et routeurs, le dépannage Layer 2/3 et la sécurisation des infrastructures. Fort d'une expérience en support technique 24/7 et d'une appétence pour la cybersécurité, je recherche un poste pour contribuer à la disponibilité et à l'optimisation des réseaux d'entreprise.",
+      downloadCv: "Télécharger le CV (PDF)",
+      location: "Avignon, France",
       educationTitle: "Formation",
       experienceTitle: "Expériences",
-      certificatesTitle: "Certificats",
-      skillsSectionTitle: "Compétences",
+      certificatesTitle: "Certifications",
+      skillsSectionTitle: "Compétences techniques",
+      languagesTitle: "Langues",
       footerRights: "Tous droits réservés.",
       emailAria: "Courriel",
       experience: [
         {
-          title: "Technicien informatique",
+          title: "Technicien informatique & réseaux",
           company: "La Bonne Heure",
           location: "Noves, France",
           period: "Juin 2024 – Juillet 2024",
           highlights: [
-            "Géré un réseau de paiement informatique en assurant une disponibilité continue et optimale, contribuant à la fluidité des transactions lors d'événements de grande envergure.",
-            "Assuré un support technique 24h/24, réduisant les temps d'arrêt de 50 % en intervenant rapidement sur les incidents critiques.",
-            "Résolu des problèmes techniques en identifiant et corrigeant des anomalies, améliorant la satisfaction client et garantissant la continuité des opérations.",
+            "Administré l'infrastructure réseau de paiement événementiel, garantissant une disponibilité continue et une bande passante optimisée lors d'événements à fort trafic.",
+            "Diagnostiqué et résolu des incidents de connectivité Layer 1/2/3 en support 24h/24, réduisant les temps d'arrêt réseau de 50 %.",
+            "Maintenu la documentation réseau (topologie, procédures de dépannage, configurations critiques) pour assurer la continuité opérationnelle.",
           ],
         },
         {
@@ -51,9 +52,8 @@ export const translations: Record<Locale, Translations> = {
           location: "Avignon, France",
           period: "Juin 2023 – Juillet 2023",
           highlights: [
-            "Gestion du stress et des périodes de forte affluence",
-            "Service client rapide et efficace",
-            "Coordination avec l'équipe en salle et en cuisine",
+            "Coordination d'équipe et gestion des flux en période de forte affluence",
+            "Service client réactif dans un environnement à haute pression",
           ],
         },
         {
@@ -62,9 +62,8 @@ export const translations: Record<Locale, Translations> = {
           location: "St-Andiol, France",
           period: "Juin 2022 – Juillet 2022",
           highlights: [
-            "Manipulation et entretien des machines de production",
-            "Respect des normes de sécurité et des procédures",
-            "Rigueur et productivité dans le travail répétitif",
+            "Respect strict des procédures de sécurité et des normes industrielles",
+            "Rigueur opérationnelle et fiabilité dans un environnement de production",
           ],
         },
         {
@@ -73,9 +72,8 @@ export const translations: Record<Locale, Translations> = {
           location: "Québec, Canada",
           period: "Janvier 2021 – Juin 2021",
           highlights: [
-            "Accueil et conseil client personnalisé dans différentes langues",
-            "Gestion des stocks et réapprovisionnement",
-            "Adaptativité",
+            "Communication multilingue (français / anglais) avec une clientèle internationale",
+            "Adaptabilité et autonomie dans un contexte interculturel",
           ],
         },
       ],
@@ -88,41 +86,75 @@ export const translations: Record<Locale, Translations> = {
       ],
       certificates: [
         {
-          name: "MOOC Sécurité Numérique de l'ANSSI",
-          description: "MOOC de l'ANSSI",
+          name: "Certification Cisco CCNA",
+          description:
+            "Routage & commutation, VLANs, OSPF, dépannage réseau IP — installation, configuration et maintenance d'infrastructures",
         },
         {
           name: "Certification Microsoft : Azure fundamentals AZ-900",
           description:
-            "Certification Microsoft attestant de connaissances fondamentales pour Microsoft Azure",
+            "Fondamentaux cloud Azure — réseaux virtuels, connectivité hybride et services d'infrastructure",
         },
         {
-          name: "Certification Cisco CCNA",
+          name: "MOOC Sécurité Numérique de l'ANSSI",
           description:
-            "Compétences fondamentales en réseaux : installation, configuration et dépannage des réseaux IP",
+            "Bonnes pratiques de sécurité réseau, gestion des risques et protection des systèmes d'information",
         },
       ],
-      skills: [
+      networkSkills: [
         {
-          category: "Systèmes & Logiciels",
-          items:
-            "Linux, Android et Windows | Suite Office | Windows Azure/Server",
+          categoryKey: "routing",
+          category: "Routage & Commutation",
+          skills: [
+            "Cisco CCNA",
+            "VLANs / Trunking",
+            "OSPF / BGP",
+            "STP / RSTP",
+            "DHCP / DNS",
+            "Inter-VLAN Routing",
+          ],
         },
         {
-          category: "Réseaux & Sécurité",
-          items:
-            "Bases en réseau (CCNA) | Connaissances en Active Directory | Passionné de cybersécurité",
+          categoryKey: "security",
+          category: "Sécurité réseau",
+          skills: [
+            "Firewalls",
+            "VPN IPsec / SSL",
+            "NAT / PAT",
+            "ACLs",
+            "Segmentation réseau",
+            "Active Directory",
+          ],
         },
         {
-          category: "Développement & Data",
-          items:
-            "Python, C++ | Bases en HTML, CSS et WordPress | Gestion de bases de données basique",
+          categoryKey: "systems",
+          category: "Systèmes & Virtualisation",
+          skills: [
+            "Windows Server",
+            "Linux",
+            "VMware",
+            "Hyper-V",
+            "Azure",
+            "Gestion des services",
+          ],
         },
         {
-          category: "Langues",
-          items:
-            "Français (natif), Anglais (niveau C1, courant), Espagnol (B1)",
+          categoryKey: "monitoring",
+          category: "Supervision & Outils",
+          skills: [
+            "Wireshark",
+            "Zabbix",
+            "Nagios",
+            "PRTG",
+            "Documentation réseau",
+            "Analyse de trafic",
+          ],
         },
+      ],
+      languages: [
+        "Français (natif)",
+        "Anglais (C1 — courant)",
+        "Espagnol (B1)",
       ],
     },
     contact: {
@@ -278,9 +310,9 @@ export const translations: Record<Locale, Translations> = {
   },
   en: {
     metadata: {
-      title: "Timotey LAMOTTE — Portfolio",
+      title: "Timotey LAMOTTE — Network Technician",
       description:
-        "Portfolio of Timotey LAMOTTE — IT student, technical support and cybersecurity.",
+        "Resume of Timotey LAMOTTE — Network Technician, CCNA certified, network administration, security and virtualization.",
     },
     nav: {
       home: "Home",
@@ -293,31 +325,32 @@ export const translations: Record<Locale, Translations> = {
       switchLanguage: "Switch language",
     },
     home: {
-      subtitle: "Student — Seeking summer 2025 job",
+      subtitle: "Network Technician — CCNA Certified",
       tagline:
-        "Motivated young student with experience in hospitality and customer service, seeking a summer 2025 job to develop my skills.",
+        "Passionate about network infrastructure, I design, deploy and maintain reliable, secure and high-performance environments.",
+      terminalPrompt: "network@timotey:~$ whoami",
       profileTitle: "Profile",
       profileText:
-        "Motivated young student with experience in hospitality and customer service, solid IT support background, and a passion for cybersecurity and networking.",
-      skillsTitle: "Key skills",
-      skillsText:
-        "Technical support, network administration, Python/C++ development, Azure and CCNA certifications. Bilingual French-English with international experience in Canada.",
+        "Junior network technician with CCNA certification, skilled in configuring switches and routers, Layer 2/3 troubleshooting and infrastructure hardening. Backed by 24/7 technical support experience and a strong interest in cybersecurity, I am seeking a role to contribute to enterprise network availability and performance optimization.",
+      downloadCv: "Download Resume (PDF)",
+      location: "Avignon, France",
       educationTitle: "Education",
       experienceTitle: "Experience",
-      certificatesTitle: "Certificates",
-      skillsSectionTitle: "Skills",
+      certificatesTitle: "Certifications",
+      skillsSectionTitle: "Technical Skills",
+      languagesTitle: "Languages",
       footerRights: "All rights reserved.",
       emailAria: "Email",
       experience: [
         {
-          title: "IT Technician",
+          title: "IT & Network Technician",
           company: "La Bonne Heure",
           location: "Noves, France",
           period: "June 2024 – July 2024",
           highlights: [
-            "Managed a payment network ensuring continuous optimal availability, contributing to smooth transactions during large-scale events.",
-            "Provided 24/7 technical support, reducing downtime by 50% by quickly resolving critical incidents.",
-            "Resolved technical issues by identifying and fixing anomalies, improving customer satisfaction and ensuring operational continuity.",
+            "Administered event payment network infrastructure, ensuring continuous uptime and optimized bandwidth during high-traffic operations.",
+            "Troubleshot Layer 1/2/3 connectivity issues with 24/7 on-call support, reducing network downtime by 50%.",
+            "Maintained network infrastructure documentation (topology, troubleshooting procedures, critical configurations) to ensure operational continuity.",
           ],
         },
         {
@@ -326,9 +359,8 @@ export const translations: Record<Locale, Translations> = {
           location: "Avignon, France",
           period: "June 2023 – July 2023",
           highlights: [
-            "Managing stress during peak periods",
-            "Fast and efficient customer service",
-            "Coordination with front-of-house and kitchen teams",
+            "Team coordination and workflow management during peak traffic periods",
+            "Responsive customer service in a high-pressure environment",
           ],
         },
         {
@@ -337,9 +369,8 @@ export const translations: Record<Locale, Translations> = {
           location: "St-Andiol, France",
           period: "June 2022 – July 2022",
           highlights: [
-            "Operating and maintaining production machinery",
-            "Compliance with safety standards and procedures",
-            "Rigor and productivity in repetitive work",
+            "Strict compliance with safety procedures and industrial standards",
+            "Operational rigor and reliability in a production environment",
           ],
         },
         {
@@ -348,9 +379,8 @@ export const translations: Record<Locale, Translations> = {
           location: "Quebec, Canada",
           period: "January 2021 – June 2021",
           highlights: [
-            "Personalized customer welcome and advice in multiple languages",
-            "Stock management and replenishment",
-            "Adaptability",
+            "Multilingual communication (French / English) with international customers",
+            "Adaptability and autonomy in a cross-cultural context",
           ],
         },
       ],
@@ -364,40 +394,75 @@ export const translations: Record<Locale, Translations> = {
       ],
       certificates: [
         {
-          name: "ANSSI Digital Security MOOC",
-          description: "ANSSI MOOC",
+          name: "Cisco CCNA Certification",
+          description:
+            "Routing & switching, VLANs, OSPF, IP network troubleshooting — infrastructure installation, configuration and maintenance",
         },
         {
           name: "Microsoft Certified: Azure fundamentals AZ-900",
           description:
-            "Microsoft certification demonstrating fundamental knowledge of Microsoft Azure",
+            "Azure cloud fundamentals — virtual networks, hybrid connectivity and infrastructure services",
         },
         {
-          name: "Cisco CCNA Certification",
+          name: "ANSSI Digital Security MOOC",
           description:
-            "Fundamental networking skills: installation, configuration and troubleshooting of IP networks",
+            "Network security best practices, risk management and information systems protection",
         },
       ],
-      skills: [
+      networkSkills: [
         {
-          category: "Systems & Software",
-          items: "Linux, Android and Windows | Office Suite | Windows Azure/Server",
+          categoryKey: "routing",
+          category: "Routing & Switching",
+          skills: [
+            "Cisco CCNA",
+            "VLANs / Trunking",
+            "OSPF / BGP",
+            "STP / RSTP",
+            "DHCP / DNS",
+            "Inter-VLAN Routing",
+          ],
         },
         {
-          category: "Networking & Security",
-          items:
-            "Networking basics (CCNA) | Active Directory knowledge | Cybersecurity enthusiast",
+          categoryKey: "security",
+          category: "Network Security",
+          skills: [
+            "Firewalls",
+            "IPsec / SSL VPN",
+            "NAT / PAT",
+            "ACLs",
+            "Network Segmentation",
+            "Active Directory",
+          ],
         },
         {
-          category: "Development & Data",
-          items:
-            "Python, C++ | HTML, CSS and WordPress basics | Basic database management",
+          categoryKey: "systems",
+          category: "Systems & Virtualization",
+          skills: [
+            "Windows Server",
+            "Linux",
+            "VMware",
+            "Hyper-V",
+            "Azure",
+            "Service Management",
+          ],
         },
         {
-          category: "Languages",
-          items:
-            "French (native), English (C1, fluent), Spanish (B1)",
+          categoryKey: "monitoring",
+          category: "Monitoring & Tools",
+          skills: [
+            "Wireshark",
+            "Zabbix",
+            "Nagios",
+            "PRTG",
+            "Network Documentation",
+            "Traffic Analysis",
+          ],
         },
+      ],
+      languages: [
+        "French (native)",
+        "English (C1 — fluent)",
+        "Spanish (B1)",
       ],
     },
     contact: {
