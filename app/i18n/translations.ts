@@ -10,7 +10,7 @@ export const translations: Record<Locale, Translations> = {
     nav: {
       home: "Accueil",
       projects: "Projets",
-      cyberNews: "Cybersécurité",
+      cyberNews: "Blue Team",
       objectives: "Objectifs",
       contact: "Contact",
       githubProfile: "Profil GitHub",
@@ -180,13 +180,16 @@ export const translations: Record<Locale, Translations> = {
         "Message envoyé ! Ceci est un message de confirmation provisoire en attendant l'intégration du formulaire.",
     },
     cyberNews: {
-      title: "Veille Cybersécurité",
+      badge: "Blue Team / Defensive Security",
+      title: "Veille Defensive Security",
       subtitle:
-        "Flux RSS en temps réel — sources françaises et anglaises, triées du plus récent au plus ancien.",
+        "Agrégateur RSS anglophone — Threat Intel, advisories de vulnérabilités, SecOps et réponse à incident, triés du plus récent au plus ancien.",
       tabs: {
         all: "Tous",
-        french: "Flux français",
-        english: "Flux anglais",
+        "threat-intel": "Threat Intel",
+        vulnerability: "Advisories",
+        secops: "SecOps",
+        "incident-response": "Incident Response",
       },
       loading: "Chargement des flux RSS…",
       error:
@@ -317,7 +320,7 @@ export const translations: Record<Locale, Translations> = {
     nav: {
       home: "Home",
       projects: "Projects",
-      cyberNews: "Cybersecurity",
+      cyberNews: "Blue Team",
       objectives: "Objectives",
       contact: "Contact",
       githubProfile: "GitHub Profile",
@@ -488,13 +491,16 @@ export const translations: Record<Locale, Translations> = {
         "Message sent! This is a preview confirmation message pending form integration.",
     },
     cyberNews: {
-      title: "Cybersecurity Monitor",
+      badge: "Blue Team / Defensive Security",
+      title: "Defensive Security Monitor",
       subtitle:
-        "Real-time RSS feeds from French and English sources, sorted newest to oldest.",
+        "English-language RSS aggregator — Threat Intel, vulnerability advisories, SecOps and incident response feeds, sorted newest to oldest.",
       tabs: {
         all: "All",
-        french: "French Feeds",
-        english: "English Feeds",
+        "threat-intel": "Threat Intel",
+        vulnerability: "Vulnerability Advisories",
+        secops: "SecOps",
+        "incident-response": "Incident Response",
       },
       loading: "Loading RSS feeds…",
       error: "Unable to load RSS feeds. Please try again later.",

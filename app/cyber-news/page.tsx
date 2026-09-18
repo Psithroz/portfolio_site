@@ -3,38 +3,53 @@
 import React from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageProvider";
+import type { BlueTeamCategoryKey } from "../i18n/types";
 
 const RSS2JSON_API = "https://api.rss2json.com/v1/api.json?rss_url=";
 
-type FeedLanguage = "fr" | "en";
-type FeedFilter = "all" | FeedLanguage;
+type FeedFilter = "all" | BlueTeamCategoryKey;
 
-const FEEDS: Record<FeedLanguage, { name: string; url: string }[]> = {
-  fr: [
-    { name: "ANSSI", url: "https://www.cert.ssi.gouv.fr/alerte/feed/" },
-    { name: "LeMagIT Sécurité", url: "https://www.lemagit.fr/rss/Securite" },
-    { name: "Zataz", url: "https://www.zataz.com/feed/" },
-    { name: "Silicon FR", url: "https://www.silicon.fr/cybersecurite/feed" },
-  ],
-  en: [
-    {
-      name: "The Hacker News",
-      url: "https://feeds.feedburner.com/TheHackersNews",
-    },
-    {
-      name: "BleepingComputer",
-      url: "https://www.bleepingcomputer.com/feed/",
-    },
-    { name: "Krebs on Security", url: "https://krebsonsecurity.com/feed/" },
-    { name: "Dark Reading", url: "https://www.darkreading.com/rss.xml" },
-  ],
-};
-
-const ALL_FEEDS = (
-  Object.entries(FEEDS) as [FeedLanguage, (typeof FEEDS)[FeedLanguage]][]
-).flatMap(([language, feeds]) =>
-  feeds.map((feed) => ({ ...feed, language }))
-);
+const FEEDS: {
+  name: string;
+  url: string;
+  category: BlueTeamCategoryKey;
+}[] = [
+  {
+    name: "CISA Advisories",
+    url: "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+    category: "vulnerability",
+  },
+  {
+    name: "SANS Internet Storm Center",
+    url: "https://isc.sans.edu/rssfeed.xml",
+    category: "incident-response",
+  },
+  {
+    name: "Microsoft Security Response Center",
+    url: "https://msrc.microsoft.com/blog/feed/",
+    category: "vulnerability",
+  },
+  {
+    name: "BleepingComputer",
+    url: "https://www.bleepingcomputer.com/feed/",
+    category: "secops",
+  },
+  {
+    name: "Krebs on Security",
+    url: "https://krebsonsecurity.com/feed/",
+    category: "threat-intel",
+  },
+  {
+    name: "The Hacker News",
+    url: "https://feeds.feedburner.com/TheHackersNews",
+    category: "threat-intel",
+  },
+  {
+    name: "Dark Reading — Threat Intelligence",
+    url: "https://www.darkreading.com/threat-intelligence.rss",
+    category: "threat-intel",
+  },
+];
 
 interface RssItem {
   title: string;
@@ -49,9 +64,35 @@ interface Article {
   link: string;
   pubDate: Date;
   source: string;
-  language: FeedLanguage;
+  category: BlueTeamCategoryKey;
   snippet: string;
 }
+
+const CATEGORY_COLORS: Record<
+  BlueTeamCategoryKey,
+  { text: string; border: string; bg: string }
+> = {
+  "threat-intel": {
+    text: "text-brand-cyan",
+    border: "border-brand-cyan/25",
+    bg: "bg-brand-cyan/5",
+  },
+  vulnerability: {
+    text: "text-amber-300",
+    border: "border-amber-400/25",
+    bg: "bg-amber-400/5",
+  },
+  secops: {
+    text: "text-brand-mint",
+    border: "border-brand-mint/25",
+    bg: "bg-brand-mint/5",
+  },
+  "incident-response": {
+    text: "text-rose-300",
+    border: "border-rose-400/25",
+    bg: "bg-rose-400/5",
+  },
+};
 
 function stripHtml(html: string): string {
   const tmp = document.createElement("div");
@@ -64,9 +105,8 @@ function truncate(text: string, maxLength = 160): string {
   return text.slice(0, maxLength).trimEnd() + "…";
 }
 
-function formatArticleDate(date: Date, language: FeedLanguage): string {
-  const localeTag = language === "fr" ? "fr-FR" : "en-US";
-  return new Intl.DateTimeFormat(localeTag, {
+function formatArticleDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -78,7 +118,7 @@ function formatArticleDate(date: Date, language: FeedLanguage): string {
 async function fetchFeed(
   feedUrl: string,
   sourceName: string,
-  language: FeedLanguage
+  category: BlueTeamCategoryKey
 ): Promise<Article[]> {
   const response = await fetch(
     `${RSS2JSON_API}${encodeURIComponent(feedUrl)}`
@@ -93,7 +133,7 @@ async function fetchFeed(
     link: item.link,
     pubDate: new Date(item.pubDate),
     source: sourceName,
-    language,
+    category,
     snippet: truncate(stripHtml(item.description || item.content || "")),
   }));
 }
@@ -114,24 +154,32 @@ function LoadingSpinner({ label }: { label: string }) {
   );
 }
 
-function FeedFilterTabs({
+function CategoryFilterTabs({
   activeFilter,
   onChange,
   labels,
 }: {
   activeFilter: FeedFilter;
   onChange: (filter: FeedFilter) => void;
-  labels: { all: string; french: string; english: string };
+  labels: {
+    all: string;
+    "threat-intel": string;
+    vulnerability: string;
+    secops: string;
+    "incident-response": string;
+  };
 }) {
   const tabs: { key: FeedFilter; label: string }[] = [
     { key: "all", label: labels.all },
-    { key: "fr", label: labels.french },
-    { key: "en", label: labels.english },
+    { key: "threat-intel", label: labels["threat-intel"] },
+    { key: "vulnerability", label: labels.vulnerability },
+    { key: "secops", label: labels.secops },
+    { key: "incident-response", label: labels["incident-response"] },
   ];
 
   return (
     <div
-      className="inline-flex items-center rounded-full border border-[rgba(0,255,194,0.25)] bg-[rgba(0,255,194,0.06)] p-1"
+      className="inline-flex flex-wrap items-center gap-1 rounded-2xl border border-[rgba(0,255,194,0.25)] bg-[rgba(0,255,194,0.06)] p-1"
       role="tablist"
       aria-label={labels.all}
     >
@@ -143,7 +191,7 @@ function FeedFilterTabs({
           aria-selected={activeFilter === tab.key}
           onClick={() => onChange(tab.key)}
           className={[
-            "rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200",
+            "rounded-xl px-3 py-2 text-xs md:text-sm font-semibold transition-all duration-200",
             activeFilter === tab.key
               ? "bg-brand-mint text-brand-bg shadow-[0_0_12px_rgba(0,255,194,0.25)]"
               : "text-brand-text-muted hover:text-brand-mint",
@@ -174,8 +222,8 @@ export default function CyberNewsPage() {
 
       try {
         const results = await Promise.all(
-          ALL_FEEDS.map((feed) =>
-            fetchFeed(feed.url, feed.name, feed.language)
+          FEEDS.map((feed) =>
+            fetchFeed(feed.url, feed.name, feed.category)
           )
         );
 
@@ -202,12 +250,12 @@ export default function CyberNewsPage() {
 
   const filteredArticles = React.useMemo(() => {
     if (activeFilter === "all") return articles;
-    return articles.filter((article) => article.language === activeFilter);
+    return articles.filter((article) => article.category === activeFilter);
   }, [articles, activeFilter]);
 
   const visibleFeeds = React.useMemo(() => {
-    if (activeFilter === "all") return ALL_FEEDS;
-    return ALL_FEEDS.filter((feed) => feed.language === activeFilter);
+    if (activeFilter === "all") return FEEDS;
+    return FEEDS.filter((feed) => feed.category === activeFilter);
   }, [activeFilter]);
 
   return (
@@ -215,13 +263,16 @@ export default function CyberNewsPage() {
       <div className="flex-1 pt-24 px-6 pb-12">
         <div className="mx-auto max-w-6xl">
           <header className="mb-10">
+            <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-mint border border-brand-mint/30 bg-brand-mint/5 mb-4">
+              {cn.badge}
+            </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-brand-text drop-shadow-[0_2px_16px_rgba(0,255,194,0.2)]">
               {cn.title}
             </h1>
             <p className="mt-3 max-w-2xl text-brand-text-muted">{cn.subtitle}</p>
 
             <div className="mt-6">
-              <FeedFilterTabs
+              <CategoryFilterTabs
                 activeFilter={activeFilter}
                 onChange={setActiveFilter}
                 labels={cn.tabs}
@@ -229,14 +280,20 @@ export default function CyberNewsPage() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              {visibleFeeds.map((feed) => (
-                <span
-                  key={`${feed.language}-${feed.name}`}
-                  className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium text-brand-mint border border-brand-mint/30 bg-brand-mint/5"
-                >
-                  {feed.name}
-                </span>
-              ))}
+              {visibleFeeds.map((feed) => {
+                const colors = CATEGORY_COLORS[feed.category];
+                return (
+                  <span
+                    key={feed.name}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border ${colors.text} ${colors.border} ${colors.bg}`}
+                  >
+                    {feed.name}
+                    <span className="opacity-70">
+                      · {cn.tabs[feed.category]}
+                    </span>
+                  </span>
+                );
+              })}
             </div>
           </header>
 
@@ -259,55 +316,60 @@ export default function CyberNewsPage() {
               role="tabpanel"
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredArticles.map((article, index) => (
-                <article
-                  key={`${article.link}-${index}`}
-                  className="group flex flex-col rounded-2xl p-5 md:p-6 bg-[rgba(21,26,33,0.5)] backdrop-blur-lg border border-[rgba(0,255,194,0.1)] transition duration-200 hover:border-brand-mint hover:shadow-[0_0_20px_rgba(0,255,194,0.15)]"
-                >
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold text-brand-mint border border-brand-mint/25 bg-brand-mint/5 truncate">
-                        {article.source}
-                      </span>
-                      <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-cyan border border-brand-cyan/25 bg-brand-cyan/5">
-                        {article.language}
-                      </span>
+              {filteredArticles.map((article, index) => {
+                const colors = CATEGORY_COLORS[article.category];
+                return (
+                  <article
+                    key={`${article.link}-${index}`}
+                    className="group flex flex-col rounded-2xl p-5 md:p-6 bg-[rgba(21,26,33,0.5)] backdrop-blur-lg border border-[rgba(0,255,194,0.1)] transition duration-200 hover:border-brand-mint hover:shadow-[0_0_20px_rgba(0,255,194,0.15)]"
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold text-brand-mint border border-brand-mint/25 bg-brand-mint/5 truncate">
+                          {article.source}
+                        </span>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide border ${colors.text} ${colors.border} ${colors.bg}`}
+                        >
+                          {cn.tabs[article.category]}
+                        </span>
+                      </div>
+                      <time
+                        dateTime={article.pubDate.toISOString()}
+                        className="text-xs text-brand-text-muted whitespace-nowrap shrink-0"
+                      >
+                        {formatArticleDate(article.pubDate)}
+                      </time>
                     </div>
-                    <time
-                      dateTime={article.pubDate.toISOString()}
-                      className="text-xs text-brand-text-muted whitespace-nowrap shrink-0"
-                    >
-                      {formatArticleDate(article.pubDate, article.language)}
-                    </time>
-                  </div>
 
-                  <h2 className="text-base md:text-lg font-bold leading-snug">
+                    <h2 className="text-base md:text-lg font-bold leading-snug">
+                      <a
+                        href={article.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-text group-hover:text-brand-mint transition-colors duration-200"
+                      >
+                        {article.title}
+                      </a>
+                    </h2>
+
+                    {article.snippet && (
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-text-muted">
+                        {article.snippet}
+                      </p>
+                    )}
+
                     <a
                       href={article.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-brand-text group-hover:text-brand-mint transition-colors duration-200"
+                      className="mt-4 inline-flex items-center text-xs font-medium text-brand-cyan hover:text-brand-mint transition-colors"
                     >
-                      {article.title}
+                      {cn.readMore} →
                     </a>
-                  </h2>
-
-                  {article.snippet && (
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-text-muted">
-                      {article.snippet}
-                    </p>
-                  )}
-
-                  <a
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center text-xs font-medium text-brand-cyan hover:text-brand-mint transition-colors"
-                  >
-                    {cn.readMore} →
-                  </a>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </section>
           )}
         </div>

@@ -1,5 +1,11 @@
 export type Locale = "fr" | "en";
 
+export type BlueTeamCategoryKey =
+  | "threat-intel"
+  | "vulnerability"
+  | "secops"
+  | "incident-response";
+
 export type ObjectiveStatusKey = "inProgress" | "target2026" | "mastered";
 export type ObjectiveCategoryKey = "technical" | "project" | "career";
 
@@ -68,12 +74,15 @@ export interface Translations {
     switchLanguage: string;
   };
   cyberNews: {
+    badge: string;
     title: string;
     subtitle: string;
     tabs: {
       all: string;
-      french: string;
-      english: string;
+      "threat-intel": string;
+      vulnerability: string;
+      secops: string;
+      "incident-response": string;
     };
     loading: string;
     error: string;
